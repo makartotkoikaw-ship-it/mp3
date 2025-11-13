@@ -73,7 +73,7 @@ Open **PowerShell**:
 ```powershell
 cd C:\ambot
 python -m venv venv
-.env\Scriptsctivate
+.\env\Scripts\ctivate
 pip install --upgrade pip
 pip install -r requirements.txt
 ```
