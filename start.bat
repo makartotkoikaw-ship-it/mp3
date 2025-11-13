@@ -5,5 +5,5 @@ set ADMIN_TELEGRAM_ID=%ADMIN_TELEGRAM_ID%
 set DB_PATH=music.db
 
 call venv\Scripts\activate
-python ambot_aiosqlite.py
+python bot.py
 pause
