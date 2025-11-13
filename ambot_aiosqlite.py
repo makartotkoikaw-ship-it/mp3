@@ -782,6 +782,7 @@ async def on_startup(app):
 # ---------------- Main ----------------
 def main():
     global application_instance
+
     app = ApplicationBuilder().token(BOT_TOKEN).build()
     application_instance = app
 
@@ -793,11 +794,12 @@ def main():
     app.add_handler(CommandHandler("history", user_history_cmd))
     app.add_handler(CommandHandler("export_logs", export_logs_cmd))
 
-    # startup tasks
-    app.post_init(lambda application: asyncio.create_task(on_startup(application)))
+    async def startup(_app):
+        await on_startup(_app)
+
+    # Proper initialization for python-telegram-bot v20+
+    app.initialize()
+    asyncio.get_event_loop().run_until_complete(startup(app))
 
     print("Bot running...")
     app.run_polling()
-
-if __name__ == "__main__":
-    main()
