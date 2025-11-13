@@ -794,12 +794,17 @@ def main():
     app.add_handler(CommandHandler("history", user_history_cmd))
     app.add_handler(CommandHandler("export_logs", export_logs_cmd))
 
+    # startup wrapper
     async def startup(_app):
         await on_startup(_app)
 
-    # Proper initialization for python-telegram-bot v20+
-    app.initialize()
-    asyncio.get_event_loop().run_until_complete(startup(app))
+    # Correct PTB v20+ lifecycle
+    async def run():
+        await app.initialize()
+        await startup(app)
+        await app.start()          # <-- REQUIRED or the bot exits immediately!
+        print("Bot running...")
+        await app.updater.start_polling()  # PTB compatibility
+        await app.wait_closed()
 
-    print("Bot running...")
-    app.run_polling()
+    asyncio.run(run())
